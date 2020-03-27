@@ -12,37 +12,63 @@ be numbers.
 */
 window.addEventListener("load", function(){
    let getForm = document.querySelector("form");
+  
    getForm.addEventListener("submit", function(){
-      let pilotNameInput = document.querySelector("input[name=pilotName]");
-      let copilotNameInput = document.querySelector("input[name=copilotName]");
-      let fuelLevelInput = document.querySelector("input[name=fuelLevel]");
-      let cargoMassInput = document.querySelector("input[name=cargoMass]");
-      if(isNaN(pilotNameInput.value)){
-         console.log("Pilot name is a string");
-      }else{
+      let pilotNameInput=document.querySelector("input[name=pilotName]");
+      let copilotNameInput=document.querySelector("input[name=copilotName]");
+      let fuelLevelInput=document.querySelector("input[name=fuelLevel]");
+      let cargoMassInput=document.querySelector("input[name=cargoMass]");
+      let getFaultyItems=document.getElementById("faultyItems");
+      let updatePilotStatus=document.getElementById("pilotStatus");
+      let updateCopilotStatus=document.getElementById("copilotStatus");
+      let updateFuelStatus=document.getElementById("fuelStatus");
+      let updateCargoStatus=document.getElementById("cargoStatus");
+      let updateLaunchStatus=document.getElementById("launchStatus");
+      
+      //form validation
+      if(isNaN(pilotNameInput.value)===false){
          alert("Pilot name must be a string");
          event.preventDefault();
       }
-      
-      if(isNaN(copilotNameInput.value) === false){
+      if(isNaN(copilotNameInput.value)===false){
          alert("CoPilot name needs to be a string of letters");
          event.preventDefault();
       }
-
       if(isNaN(cargoMassInput.value)){
          alert("Cargo Mass must be a number.");
          event.preventDefault();
       }
-
       if(isNaN(fuelLevelInput.value)){
          alert("Fuel level must be a number.");
          event.preventDefault();
       }
-      if(pilotNameInput.value === ""|| copilotNameInput.value === "" || fuelLevelInput.value === "" || cargoMassInput.value === ""){
+      if(pilotNameInput.value==="" || copilotNameInput.value==="" || fuelLevelInput.value==="" || cargoMassInput.value===""){
          alert("All fields are required!");
+         event.preventDefault();
       }
-     
-     
+      //not sure if these should go inside the if statement just yet... but it reads like they dont have to.
+      updatePilotStatus.innerHTML=`Pilot ${pilotNameInput.value} ready`;
+      updateCopilotStatus.innerHTML=`Copilot ${copilotNameInput.value} ready`;
+      if(fuelLevelInput.value<10000){
+         getFaultyItems.style.visibility="visible";
+         updateFuelStatus.innerHTML="There is not enough fuel for the journey.";
+         updateLaunchStatus.innerHTML="Shuttle not ready for launch.";
+         updateLaunchStatus.style.color="red";
+         event.preventDefault();
+      }
+      if(cargoMassInput.value>10000){
+         getFaultyItems.style.visibility="visible";
+         updateCargoStatus.innerHTML="There is too much mass to take off.";
+         updateLaunchStatus.innerHTML="Shuttle not ready for launch.";
+         updateLaunchStatus.style.color="red";
+         event.preventDefault();
+      }
+      if(fuelLevelInput.value>10000 && cargoMassInput.value<10000){
+         getFaultyItems.style.visibility="visible";
+         updateLaunchStatus.innerHTML="Shuttle is ready for launch.";
+         updateLaunchStatus.style.color="green";
+         event.preventDefault();
+      }
    });
 });
 
